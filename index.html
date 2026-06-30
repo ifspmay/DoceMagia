@@ -1,119 +1,360 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DoceMagia</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
     <header>
-
+      <h1>DoceMagia</h1>
     </header>
+
     <main>
-        <section id="Inicio">
+      <section id="Inicio" class="tela active">
+        <h2>Inicio</h2>
 
+        <div class="cards-dashboard">
+          <div class="card-dashboard">
+            <h3>Vendas do dia</h3>
+            <p>R$ 1.240,00</p>
+          </div>
+          <div class="card-dashboard">
+            <h3>Encomendas ativas</h3>
+            <p>6</p>
+          </div>
+          <div class="card-dashboard">
+            <h3>Alertas de estoque</h3>
+            <p>3</p>
+          </div>
+          <div class="card-dashboard">
+            <h3>Total de produtos</h3>
+            <p>18</p>
+          </div>
+        </div>
+
+        <h3>Ingredientes abaixo do ponto mínimo</h3>
+        <p>Açúcar, leite condensado e ovos</p>
+
+        <h3>Encomendas recentes</h3>
+        <p>Maria - Entrega hoje - Em produção</p>
+        <p>João - Entrega amanhã - Pendente</p>
+      </section>
+
+      <section id="Produtos" class="tela">
+        <div id="produtosLista" class="painel active">
+          <h2>Produtos</h2>
+
+          <div>
+            <input type="text" placeholder="Buscar produto..." />
+            <button id="btnNovoProduto">+ Novo produto</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Produção</th>
+              <th>Ingredientes</th>
+            </tr>
+            <tr>
+              <td>Bolo de Chocolate</td>
+              <td>Bolo</td>
+              <td>R$ 85,00</td>
+              <td>240 min</td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <td>Torta de Morango</td>
+              <td>Torta</td>
+              <td>R$ 75,00</td>
+              <td>200 min</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>Brigadeiro</td>
+              <td>Brigadeiro</td>
+              <td>R$ 8,00</td>
+              <td>30 min</td>
+              <td>3</td>
+            </tr>
+          </table>
+        </div>
+
+        <section id="NovoProduto" class="painel">
+          <h3>Novo produto</h3>
+          <label>
+            Nome do produto
+            <input type="text" placeholder="Ex: Bolo de cenoura" />
+          </label>
+          <label
+            >Categoria
+            <select>
+              <option>Bolo</option>
+              <option>Torta</option>
+              <option>Brigadeiro</option>
+              <option>Cupcake</option>
+            </select>
+          </label>
+          <label>
+            Receita
+            <input type="text" placeholder="Ex: farinha 2kg, ovos 6" />
+          </label>
+          <label>
+            Preço (R$)
+            <input type="number" step="0.01" min="0" placeholder="0.00" />
+          </label>
+          <label>
+            Tempo de produção(min)
+            <input type="number" min="0" placeholder="60" />
+          </label>
+          <button type="button" id="btnFecharNovoProduto">Voltar</button>
+          <button type="button">Salvar produto</button>
+        </section>
+      </section>
+
+      <section id="Ingredientes" class="tela">
+        <h2>Ingredientes</h2>
+
+        <div id="listaIngredientes" class="painel active">
+          <div>
+            <input type="text" placeholder="Buscar ingrediente..." />
+            <button id="btnNovoIngrediente">+ Novo ingrediente</button>
+          </div>
+
+          <p>Em falta: açúcar e leite condensado</p>
+
+          <table>
+            <tr>
+              <th>Ingrediente</th>
+              <th>Unidade</th>
+              <th>Disponível</th>
+              <th>Ponto mínimo</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>Açúcar</td>
+              <td>kg</td>
+              <td>1,5</td>
+              <td>3</td>
+              <td>Baixo</td>
+            </tr>
+            <tr>
+              <td>Farinha</td>
+              <td>kg</td>
+              <td>8</td>
+              <td>5</td>
+              <td>Ok</td>
+            </tr>
+          </table>
+
+          <button id="btnReabastecer">Reabastecer</button>
+        </div>
+
+        <section id="NovoIngrediente" class="painel">
+          <h3>Novo ingrediente</h3>
+          <label>Nome<input type="text" /></label>
+          <label
+            >Unidade
+            <select>
+              <option>Kg</option>
+              <option>g</option>
+              <option>mL</option>
+              <option>L</option>
+            </select>
+          </label>
+          <label>Quantidade inicial<input type="number" min="0" /></label>
+          <label>Ponto mínimo<input type="number" min="0" /></label>
+          <button type="button" id="btnFecharNovoIngrediente">Voltar</button>
+          <button type="button">Salvar</button>
         </section>
 
-        <section id="Produtos">
-            <div>
-                <input type="text" placeholder="Buscar produto...">
-                <button>
-                    <h4>+ Novo produto</h4>
-                </button>
-            </div>
-            <table>
-                <tr>
-                    <th>Produto</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Produção</th>
-                </tr>
-                <tr>
-                    <td>Bolo de Chocolate</td>
-                    <td>Bolo</td>
-                    <td>R$ 85,00</td>
-                    <td>240 min</td>
-                </tr>
-                <tr>
-                    <td>Torta de Morango</td>
-                    <td>Torta</td>
-                    <td>R$ 75,00</td>
-                    <td>200 min</td>
-                </tr>
-                <tr>
-                    <td>Torta de Limão</td>
-                    <td>Torta</td>
-                    <td>R$ 70,00</td>
-                    <td>180 min</td>
-                </tr>
-            </table>
-            <div>
-                <div>
-                    <h4>Novo produto</h2>
-                    <button> x</button>
-                </div>
-                <label>
-                    Nome do produto
-                    <input type="text" placeholder="Ex: Bolo de cenoura">
-                </label>
-                <label>Categoria
-                    <select>
-                        <option>Bolo</option>
-                        <option>Torta</option>
-                        <option>Brigadeiro</option>
-                        <option>Outro</option>
-                    </select>
-                </label>
-                <div>
-                    <label>
-                        Preço(R$)
-                        <input type="number" step="0.01" min="0" placeholder="0.00">
-                    </label>
-                    <label>
-                        Tempo de produção(min)
-                        <input type="number" min="0" placeholder="60">
-                    </label>
-                </div>
-
-            </div>
+        <section id="Reabastecer" class="painel">
+          <h3>Reabastecer</h3>
+          <label
+            >Ingrediente<select>
+              <option>Açúcar</option>
+              <option>Farinha</option>
+              <option>Leite condensado</option>
+            </select></label
+          >
+          <label>Quantidade a adicionar<input type="number" min="0" /></label>
+          <button type="button" id="btnFecharReabastecer">Voltar</button>
+          <button type="button">Salvar</button>
         </section>
+      </section>
 
-        <section id="ingredientes">
+      <section id="Clientes" class="tela">
+        <h2>Clientes</h2>
 
+        <div id="listaClientes" class="painel active">
+          <div>
+            <input type="text" placeholder="Buscar cliente..." />
+            <button id="btnNovoCliente">+ Novo cliente</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Cliente</th>
+              <th>Telefone</th>
+              <th>E-mail</th>
+            </tr>
+            <tr>
+              <td>Maria Souza</td>
+              <td>(11) 99999-0000</td>
+              <td>maria@email.com</td>
+            </tr>
+            <tr>
+              <td>João Pereira</td>
+              <td>(11) 98888-1111</td>
+              <td>joao@email.com</td>
+            </tr>
+          </table>
+        </div>
+
+        <section id="NovoCliente" class="painel">
+          <h3>Novo cliente</h3>
+          <label>Nome<input type="text" /></label>
+          <label>Telefone<input type="text" /></label>
+          <label>E-mail<input type="email" /></label>
+          <button type="button" id="btnFecharNovoCliente">Voltar</button>
+          <button type="button">Salvar</button>
         </section>
+      </section>
 
-        <section id="Encomendas">
+      <section id="Encomendas" class="tela">
+        <h2>Encomendas</h2>
 
+        <div id="listaEncomendas" class="painel active">
+          <div>
+            <input type="text" placeholder="Buscar encomenda..." />
+            <button id="btnNovaEncomenda">+ Nova encomenda</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Cliente</th>
+              <th>Entrega</th>
+              <th>Pagamento</th>
+              <th>Valor</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>Maria</td>
+              <td>Hoje</td>
+              <td>Pix</td>
+              <td>R$ 120,00</td>
+              <td>Em produção</td>
+            </tr>
+            <tr>
+              <td>João</td>
+              <td>Amanhã</td>
+              <td>Dinheiro</td>
+              <td>R$ 80,00</td>
+              <td>Pendente</td>
+            </tr>
+          </table>
+        </div>
+
+        <section id="NovaEncomenda" class="painel">
+          <h3>Nova encomenda</h3>
+          <label
+            >Cliente<select>
+              <option>Maria Souza</option>
+              <option>João Pereira</option>
+            </select></label
+          >
+          <label>Data de entrega<input type="date" /></label>
+          <label
+            >Forma de pagamento<select>
+              <option>Pix</option>
+              <option>Dinheiro</option>
+              <option>Cartão</option>
+            </select></label
+          >
+          <label
+            >Produto<select>
+              <option>Bolo de Chocolate</option>
+              <option>Torta de Morango</option>
+              <option>Brigadeiro</option>
+            </select></label
+          >
+          <label>Quantidade<input type="number" min="0" /></label>
+          <button type="button" id="btnFecharNovaEncomenda">Voltar</button>
+          <button type="button">Salvar</button>
         </section>
+      </section>
 
-        <section id="VendaBalcão">
+      <section id="VendaBalcão" class="tela">
+        <h2>Venda Balcão</h2>
 
-        </section>
+        <div>
+          <h3>Produtos</h3>
+          <button>Bolo de chocolate</button>
+          <button>Torta de morango</button>
+          <button>Brigadeiro</button>
+        </div>
 
-        <section id="Relatorios">
+        <div>
+          <h3>Carrinho</h3>
+          <p>1x Brigadeiro - R$ 8,00</p>
+          <p>Valor total: R$ 8,00</p>
+          <label>Desconto<input type="text" placeholder="0,00" /></label>
+          <label
+            >Forma de pagamento<select>
+              <option>Dinheiro</option>
+              <option>Pix</option>
+              <option>Cartão</option>
+            </select></label
+          >
+          <button>Finalizar</button>
+        </div>
+      </section>
 
-        </section>
+      <section id="Relatorios" class="tela">
+        <h2>Relatórios</h2>
+
+        <p>venda total: R$ 5.400,00</p>
+        <p>Número de transações: 42</p>
+
+        <div class="card-dashboard">
+          <p>Vendas dos últimos 7 dias</p>
+          <p>Produto mais vendido: Bolo de chocolate</p>
+          <table>
+            <tr>
+              <th>Data</th>
+              <th>Itens</th>
+              <th>Desconto</th>
+              <th>Total</th>
+            </tr>
+            <tr>
+              <td>20/06</td>
+              <td>3</td>
+              <td>R$ 0,00</td>
+              <td>R$ 120,00</td>
+            </tr>
+            <tr>
+              <td>21/06</td>
+              <td>5</td>
+              <td>R$ 10,00</td>
+              <td>R$ 190,00</td>
+            </tr>
+          </table>
+        </div>
+      </section>
     </main>
+
     <footer>
-        <button>
-            <p>Inicio</p>
-        </button>
-        <button>
-            <p>Produtos</p>
-        </button>
-        <button>
-            <p>Ingredientes</p>
-        </button>
-        <button>
-            <p>Encomendas</p>
-        </button>
-        <button>
-            <p>Venda Balcão</p>
-        </button>
-        <button>
-            <p>Relatorios</p>
-        </button>
+      <button id="btnInicio">Inicio</button>
+      <button id="btnProdutos">Produtos</button>
+      <button id="btnIngredientes">Ingredientes</button>
+      <button id="btnClientes">Clientes</button>
+      <button id="btnEncomendas">Encomendas</button>
+      <button id="btnVendaBalcao">Venda Balcão</button>
+      <button id="btnRelatorios">Relatorios</button>
     </footer>
-</body>
+  </body>
 </html>

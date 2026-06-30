@@ -1,5 +1,57 @@
-* {
-    margin: 0;
-    padding: 0;
+body {
+  font-family: Arial, sans-serif;
 }
 
+main {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tela {
+  display: none;
+}
+
+.tela.active {
+  display: block;
+}
+
+.painel {
+  display: none;
+}
+
+.painel.active {
+  display: block;
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 900px;
+  margin: 20px auto 0;
+}
+
+button,
+input,
+select {
+  margin: 4px;
+}
+
+label {
+  display: block;
+  margin: 8px 0;
+}
+
+.cards-dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.card-dashboard {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-width: 180px;
+  flex: 1;
+}
