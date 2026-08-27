@@ -55,3 +55,7 @@ label {
   min-width: 180px;
   flex: 1;
 }
+
+img{
+  max-width: 75px;
+}
