@@ -58,4 +58,17 @@ label {
 
 img{
   max-width: 75px;
+  
 }
+
+td{
+  border: 1px solid #000;
+  border-radius:5px;
+  text-align: center;
+  padding: 10px;
+}
+
+th{
+  padding:5px 15px 2px 15px;
+}
+
