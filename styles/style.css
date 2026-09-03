@@ -1,0 +1,99 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0%;
+  background-color: #ebebeb;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tela {
+  display: none;
+}
+
+.tela.active {
+  display: block;
+}
+
+.painel {
+  display: none;
+}
+
+.painel.active {
+  display: block;
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 900px;
+  margin: 20px auto 0;
+  background-color: #f8b8e3;
+  border: 2px solid #000;
+  border-radius: 5px; 
+  justify-content: space-between;
+  padding: 0px 40px 0px 40px;
+}
+
+button,
+input,
+select {
+  margin: 4px;
+}
+
+label {
+  display: block;
+  margin: 8px 0;
+}
+
+.cards-dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.card-dashboard {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-width: 180px;
+  flex: 1;
+}
+
+img{
+  max-width: 75px;
+  
+}
+
+td{
+  border: 1px solid #000;
+  border-radius:5px;
+  text-align: center;
+  padding: 10px;
+  background-color: #f8a1db;
+}
+
+th{
+  padding:5px 15px 2px 15px;
+}
+
+h1{
+  margin: 0%;
+  padding: 30px;
+  background-color: #e743b0;
+}
+
+h2{
+  margin: 0%;
+  padding: 20px;
+  background-color: #f37bcb;
+}
+
+#produtosLista{
+  margin: 0%;
+  padding: 20px;
+  background-color: #f8b8e3;
+}

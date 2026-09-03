@@ -42,7 +42,7 @@ const btnFecharNovaEncomenda = document.getElementById(
 const listaEncomendas = document.getElementById("listaEncomendas");
 const formularioEncomenda = document.getElementById("NovaEncomenda");
 
-function mostrarTela(telaAtiva) {
+/*function mostrarTela(telaAtiva) {
   telaInicio.classList.remove("active");
   telaProdutos.classList.remove("active");
   telaIngredientes.classList.remove("active");
@@ -82,13 +82,15 @@ function mostrarTela(telaAtiva) {
     btnRelatorios.classList.add("active");
   }
 }
-
+*/
 btnInicio.addEventListener("click", function () {
-  mostrarTela("Inicio");
+  //mostrarTela("Inicio");
+  window.location.href='index.html';
 });
 
 btnProdutos.addEventListener("click", function () {
-  mostrarTela("Produtos");
+  //mostrarTela("Produtos");
+  window.location.href = 'produtos.html';
 });
 
 btnIngredientes.addEventListener("click", function () {
