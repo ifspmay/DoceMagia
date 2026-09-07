@@ -9,22 +9,6 @@ main {
   margin: 0 auto;
 }
 
-.tela {
-  display: none;
-}
-
-.tela.active {
-  display: block;
-}
-
-.painel {
-  display: none;
-}
-
-.painel.active {
-  display: block;
-}
-
 footer {
   display: flex;
   flex-wrap: wrap;
@@ -34,8 +18,11 @@ footer {
   background-color: #f8b8e3;
   border: 2px solid #000;
   border-radius: 5px; 
-  justify-content: space-between;
+  justify-content:space-between;
   padding: 0px 40px 0px 40px;
+  position: sticky;
+  bottom: 0px;
+  
 }
 
 button,
@@ -44,28 +31,13 @@ select {
   margin: 4px;
 }
 
-label {
-  display: block;
-  margin: 8px 0;
-}
-
-.cards-dashboard {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 15px 0;
-}
-
-.card-dashboard {
-  border: 1px solid #ccc;
-  padding: 10px;
-  min-width: 180px;
-  flex: 1;
+a{
+  text-decoration: none;
+  color: #000;
 }
 
 img{
-  max-width: 75px;
-  
+  max-width: 75px; 
 }
 
 td{
@@ -94,6 +66,12 @@ h2{
 
 #produtosLista{
   margin: 0%;
-  padding: 20px;
-  background-color: #f8b8e3;
+  padding: 0px 120px 20px 120px;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
 }
+
+/*.painel.active {
+  display: block;
+}*/

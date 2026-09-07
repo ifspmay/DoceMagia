@@ -36,12 +36,19 @@ footer {
   border-radius: 5px; 
   justify-content: space-between;
   padding: 0px 40px 0px 40px;
+  position: sticky;
+  bottom: 0px;
 }
 
 button,
 input,
 select {
   margin: 4px;
+}
+
+a{
+  text-decoration: none;
+  color: #000;
 }
 
 label {

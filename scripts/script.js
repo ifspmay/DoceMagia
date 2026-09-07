@@ -83,15 +83,15 @@ const formularioEncomenda = document.getElementById("NovaEncomenda");
   }
 }
 */
-btnInicio.addEventListener("click", function () {
+/*btnInicio.addEventListener("click", function () {
   //mostrarTela("Inicio");
   window.location.href='index.html';
-});
+});*/
 
-btnProdutos.addEventListener("click", function () {
+/*btnProdutos.addEventListener("click", function () {
   //mostrarTela("Produtos");
   window.location.href = 'produtos.html';
-});
+});*/
 
 btnIngredientes.addEventListener("click", function () {
   mostrarTela("Ingredientes");
