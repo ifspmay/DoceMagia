@@ -9,9 +9,9 @@ main {
   margin: 0 auto;
 }
 
-.tela {
+/*.tela {
   display: none;
-}
+}*/
 
 .tela.active {
   display: block;
