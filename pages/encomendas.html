@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encomendas</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+    <script src="../scripts/script.js" defer></script>
+</head>
+<body>
+    <section id="Encomendas" class="tela">
+        <h2>Encomendas</h2>
+
+        <div id="listaEncomendas" class="painel active">
+          <div>
+            <input type="text" placeholder="Buscar encomenda..." />
+            <button id="btnNovaEncomenda">+ Nova encomenda</button>
+          </div>
+
+          <table>
+            <tr>
+              <th>Cliente</th>
+              <th>Entrega</th>
+              <th>Pagamento</th>
+              <th>Valor</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>Maria</td>
+              <td>Hoje</td>
+              <td>Pix</td>
+              <td>R$ 120,00</td>
+              <td>Em produção</td>
+            </tr>
+            <tr>
+              <td>João</td>
+              <td>Amanhã</td>
+              <td>Dinheiro</td>
+              <td>R$ 80,00</td>
+              <td>Pendente</td>
+            </tr>
+          </table>
+        </div>
+
+        <section id="NovaEncomenda" class="painel">
+          <h3>Nova encomenda</h3>
+          <label
+            >Cliente<select>
+              <option>Maria Souza</option>
+              <option>João Pereira</option>
+            </select></label
+          >
+          <label>Data de entrega<input type="date" /></label>
+          <label
+            >Forma de pagamento<select>
+              <option>Pix</option>
+              <option>Dinheiro</option>
+              <option>Cartão</option>
+            </select></label
+          >
+          <label>Produto<select>
+              <option>Bolo de Chocolate</option>
+              <option>Torta de Morango</option>
+              <option>Brigadeiro</option>
+            </select></label
+          >
+          <label>Quantidade<input type="number" min="0" /></label>
+          <button type="button" id="btnFecharNovaEncomenda">Voltar</button>
+          <button type="button">Salvar</button>
+        </section>
+      </section>
+
+    <footer>
+      <button id="btnInicio"><a href="index.html">Inicio</a></button>
+      <button id="btnProdutos"><a href="produtos.html">Produtos</a></button>
+      <button id="btnIngredientes"><a href="ingredientes.html">Ingredientes</a></button>
+      <button id="btnClientes"><a href="clientes.html">Clientes</a></button>
+      <button id="btnEncomendas"><a href="encomendas.html">Encomendas</a></button>
+      <button id="btnVendaBalcao"><a href="balcao.html">Venda Balcão</a></button>
+      <button id="btnRelatorios"><a href="relatorios.html">Relatorios</a></button>
+    </footer>
+</body>
+</html>

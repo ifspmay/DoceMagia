@@ -34,7 +34,7 @@ footer {
   background-color: #f8b8e3;
   border: 2px solid #000;
   border-radius: 5px; 
-  justify-content: space-between;
+  justify-content:space-between;
   padding: 0px 40px 0px 40px;
   position: sticky;
   bottom: 0px;
@@ -99,8 +99,18 @@ h2{
   background-color: #f37bcb;
 }
 
-#produtosLista{
+.painel.active{
   margin: 0%;
-  padding: 20px;
-  background-color: #f8b8e3;
+  padding: 0px 120px 20px 120px;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.tela{
+  margin: 0%;
+  padding: 0px 120px 20px 120px;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
 }
