@@ -17,9 +17,9 @@ main {
   display: block;
 }
 
-.painel {
+/*.painel {
   display: none;
-}
+}*/
 
 .painel.active {
   display: block;
