@@ -1,42 +1,362 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovoProduto</title>
-    <link rel="stylesheet" href="../styles/style.css" />
-    <script src="../scripts/script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AddProduto</title>
+  <link rel="stylesheet" href="../styles/style.css" />
 </head>
 <body>
-    <section id="NovoProduto" class="painel">
-          <h3>Novo produto</h3>
-          <label>
-            Nome do produto
-            <input type="text" placeholder="Ex: Bolo de cenoura" />
-          </label>
-          <label
-            >Categoria
-            <select>
-              <option>Bolo</option>
-              <option>Torta</option>
-              <option>Brigadeiro</option>
-              <option>Cupcake</option>
-            </select>
-          </label>
-          <label>
-            Receita
-            <input type="text" placeholder="Ex: farinha 2kg, ovos 6" />
-          </label>
-          <label>
-            Preço (R$)
-            <input type="number" step="0.01" min="0" placeholder="0.00" />
-          </label>
-          <label>
-            Tempo de produção(min)
-            <input type="number" min="0" placeholder="60" />
-          </label>
-          <button type="button" id="btnFecharNovoProduto"><a href="produtos.html"> Voltar</a></button>
-          <button type="button">Salvar produto</button>
-        </section>
+  <div class="container">
+        <h1>🍰 Cadastro de Produtos</h1>
+        <p class="subtitle">Preencha os dados do produto para cadastrá-lo na doceria</p>
+
+        <!-- Área de mensagens -->
+        <div id="mensagem" class="mensagem"></div>
+
+        <!-- Formulário -->
+        <form id="formProduto">
+            
+            <!-- NOME -->
+            <div class="form-group">
+                <label for="nome">
+                    Nome do Produto <span class="required">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="nome" 
+                    name="nome"
+                    placeholder="Ex: Bolo de Chocolate Belga"
+                    required
+                    maxlength="200"
+                />
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <textarea 
+                    id="descricao" 
+                    name="descricao"
+                    placeholder="Descreva o produto..."
+                    maxlength="1000"
+                ></textarea>
+            </div>
+
+            <!-- PREÇO E PREÇO PROMOCIONAL -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preco">
+                        Preço (R$) <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="preco" 
+                        name="preco"
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0.01"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="precoPromocional">Preço Promocional (R$)</label>
+                    <input 
+                        type="number" 
+                        id="precoPromocional" 
+                        name="precoPromocional"
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                    />
+                </div>
+            </div>
+
+            <!-- TEMPO DE PREPARO E CATEGORIA -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tempoPreparo">
+                        Tempo de Preparo (min) <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="tempoPreparo" 
+                        name="tempoPreparo"
+                        placeholder="Ex: 60"
+                        min="1"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="categoriaId">
+                        Categoria <span class="required">*</span>
+                    </label>
+                    <select id="categoriaId" name="categoriaId" required>
+                        <option value="">Carregando categorias...</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- INGREDIENTES -->
+            <div class="form-group">
+                <label for="ingredientes">Ingredientes</label>
+                <textarea 
+                    id="ingredientes" 
+                    name="ingredientes"
+                    placeholder="Ex: Farinha, Ovos, Chocolate, Manteiga..."
+                    maxlength="1000"
+                ></textarea>
+            </div>
+
+            <!-- PESO E IMAGEM -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="peso">Peso</label>
+                    <input 
+                        type="text" 
+                        id="peso" 
+                        name="peso"
+                        placeholder="Ex: 1.2kg"
+                        maxlength="50"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="imagem">Nome da Imagem</label>
+                    <input 
+                        type="text" 
+                        id="imagem" 
+                        name="imagem"
+                        placeholder="Ex: bolo-chocolate.jpg"
+                        maxlength="255"
+                    />
+                </div>
+            </div>
+
+            <!-- CHECKBOXES -->
+            <div class="form-group">
+                <label>Opções</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="destaque" name="destaque" />
+                        <span>⭐ Destaque</span>
+                    </label>
+
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="disponivel" name="disponivel" checked />
+                        <span> Disponível</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="limparFormulario()">
+                    🗑️ Limpar
+                </button>
+                <button type="submit" class="btn-primary" id="btnEnviar">
+                    💾 Cadastrar Produto
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURAÇÃO
+        // ========================================
+        const API_URL = 'http://10.124.75.2:8080/api/v1';
+
+        // ========================================
+        // ELEMENTOS DO DOM
+        // ========================================
+        const form = document.getElementById('formProduto');
+        const mensagem = document.getElementById('mensagem');
+        const btnEnviar = document.getElementById('btnEnviar');
+        const selectCategoria = document.getElementById('categoriaId');
+
+        // ========================================
+        // MOSTRAR MENSAGEM
+        // ========================================
+        function mostrarMensagem(texto, tipo = 'sucesso') {
+            mensagem.textContent = texto;
+            mensagem.className = `mensagem ${tipo}`;
+
+            // Esconde automaticamente após 5 segundos (exceto erro)
+            if (tipo !== 'erro') {
+                setTimeout(() => {
+                    mensagem.className = 'mensagem';
+                }, 5000);
+            }
+        }
+
+        // ========================================
+        // CARREGAR CATEGORIAS NO SELECT
+        // ========================================
+        async function carregarCategorias() {
+            try {
+                const resposta = await fetch(`${API_URL}/categorias/ativas`);
+
+                if (!resposta.ok) {
+                    throw new Error(`HTTP ${resposta.status}`);
+                }
+
+                const categorias = await resposta.json();
+
+                // Limpa o select
+                selectCategoria.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+                // Adiciona as categorias
+                categorias.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = `${cat.icone || '📦'} ${cat.nome}`;
+                    selectCategoria.appendChild(option);
+                });
+
+                console.log(`✅ ${categorias.length} categorias carregadas`);
+
+            } catch (erro) {
+                console.error('❌ Erro ao carregar categorias:', erro);
+                selectCategoria.innerHTML = '<option value="">❌ Erro ao carregar categorias</option>';
+                mostrarMensagem('Erro ao carregar categorias. Verifique se o back-end está rodando.', 'erro');
+            }
+        }
+
+        // ========================================
+        // ENVIAR FORMULÁRIO (POST)
+        // ========================================
+        form.addEventListener('submit', async (evento) => {
+            evento.preventDefault(); // Não recarrega a página
+
+            // Desabilita o botão
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<span class="spinner"></span> Cadastrando...';
+
+            try {
+                // ========================================
+                // MONTA O OBJETO COM OS DADOS
+                // ========================================
+                const dados = {
+                    nome: document.getElementById('nome').value.trim(),
+                    descricao: document.getElementById('descricao').value.trim() || null,
+                    preco: parseFloat(document.getElementById('preco').value),
+                    precoPromocional: document.getElementById('precoPromocional').value 
+                        ? parseFloat(document.getElementById('precoPromocional').value) 
+                        : null,
+                    tempoPreparo: parseInt(document.getElementById('tempoPreparo').value),
+                    categoriaId: parseInt(document.getElementById('categoriaId').value),
+                    ingredientes: document.getElementById('ingredientes').value.trim() || null,
+                    peso: document.getElementById('peso').value.trim() || null,
+                    imagem: document.getElementById('imagem').value.trim() || null,
+                    destaque: document.getElementById('destaque').checked,
+                    disponivel: document.getElementById('disponivel').checked
+                };
+
+                // ========================================
+                // VALIDAÇÕES
+                // ========================================
+                if (!dados.nome) {
+                    throw new Error('O nome do produto é obrigatório');
+                }
+
+                if (!dados.preco || dados.preco <= 0) {
+                    throw new Error('O preço deve ser maior que zero');
+                }
+
+                if (!dados.tempoPreparo || dados.tempoPreparo <= 0) {
+                    throw new Error('O tempo de preparo deve ser maior que zero');
+                }
+
+                if (!dados.categoriaId) {
+                    throw new Error('Selecione uma categoria');
+                }
+
+                if (dados.precoPromocional && dados.precoPromocional >= dados.preco) {
+                    throw new Error('O preço promocional deve ser menor que o preço normal');
+                }
+
+                console.log('📤 Enviando dados:', dados);
+
+                // ========================================
+                // FAZ O POST PARA A API
+                // ========================================
+                const resposta = await fetch(`${API_URL}/produtos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                // ========================================
+                // TRATA A RESPOSTA
+                // ========================================
+                if (!resposta.ok) {
+                    // Tenta pegar a mensagem de erro do back-end
+                    let mensagemErro = `Erro HTTP ${resposta.status}`;
+                    
+                    try {
+                        const erroData = await resposta.json();
+                        if (erroData.message) {
+                            mensagemErro = erroData.message;
+                        } else if (erroData.errors) {
+                            mensagemErro = Object.values(erroData.errors).join(', ');
+                        }
+                    } catch (e) {
+                        // Ignora se não conseguir ler o JSON
+                    }
+                    
+                    throw new Error(mensagemErro);
+                }
+
+                const produtoCriado = await resposta.json();
+                console.log('✅ Produto criado:', produtoCriado);
+
+                // ========================================
+                // SUCESSO!
+                // ========================================
+                mostrarMensagem(
+                    `✅ Produto "${produtoCriado.nome}" cadastrado com sucesso! (ID: ${produtoCriado.id})`,
+                    'sucesso'
+                );
+
+                // Limpa o formulário (mantém disponível marcado)
+                limparFormulario();
+
+            } catch (erro) {
+                console.error('❌ Erro:', erro);
+                mostrarMensagem(`❌ ${erro.message}`, 'erro');
+            } finally {
+                // Reabilita o botão
+                btnEnviar.disabled = false;
+                btnEnviar.innerHTML = '💾 Cadastrar Produto';
+            }
+        });
+
+        // ========================================
+        // LIMPAR FORMULÁRIO
+        // ========================================
+        function limparFormulario() {
+            form.reset();
+            
+            // Mantém "disponível" marcado por padrão
+            document.getElementById('disponivel').checked = true;
+            document.getElementById('destaque').checked = false;
+            
+            // Foca no primeiro campo
+            document.getElementById('nome').focus();
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🍰 Cadastro de Produtos iniciado');
+            carregarCategorias();
+        });
+    </script>
 </body>
 </html>
