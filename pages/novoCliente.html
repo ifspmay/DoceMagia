@@ -5,9 +5,225 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovoCliente</title>
     <link rel="stylesheet" href="../styles/style.css" />
-    <script src="../scripts/script.js" defer></script>
 </head>
 <body>
+
+
+  <div class="container">
+        <h1> Cadastro de Cliente</h1>
+        <p class="subtitle">Preencha os dados do cliente para cadastrá-lo na doceria</p>
+
+        <!-- Área de mensagens -->
+        <div id="mensagem" class="mensagem"></div>
+
+        <!-- Formulário -->
+        <form id="formProduto">
+            
+            <!-- NOME -->
+            <div class="form-group">
+                <label for="nomeC">
+                    Nome do Cliente <span class="required">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="nomeC" 
+                    name="nomeC"
+                    placeholder="Ex: Jonas2"
+                    required
+                    maxlength="200"
+                />
+            </div>
+
+            <!-- Telefone -->
+            <div class="form-group">
+                <label for="telefone">
+                  Telefone <span class="required">*</span>
+                </label>
+                <input 
+                    type="text"
+                    id="telefone" 
+                    name="telefone"
+                    placeholder="(DDD) 93288-2323"
+                    maxlength="12"
+                />
+            </div>
+
+            <!-- Email -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="emailC">
+                        Email <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="emailC" 
+                        name="emailC"
+                        placeholder="Jonas2@gmail.com"
+                        maxlength="320"
+                    />
+                </div>
+
+            <!-- BOTÕES -->
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="limparFormulario()">
+                    🗑️ Limpar
+                </button>
+                <button type="submit" class="btn-primary" id="btnEnviar">
+                    💾 Salvar
+                </button>
+                <button type="button">
+                  <a href="clientes.html">Voltar</a>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURAÇÃO
+        // ========================================
+        const API_URL = 'http://10.124.75.2:8080/api/v1';
+
+        // ========================================
+        // ELEMENTOS DO DOM
+        // ========================================
+        const form = document.getElementById('formProduto');
+        const mensagem = document.getElementById('mensagem');
+        const btnEnviar = document.getElementById('btnEnviar');
+
+        // ========================================
+        // MOSTRAR MENSAGEM
+        // ========================================
+        function mostrarMensagem(texto, tipo = 'sucesso') {
+            mensagem.textContent = texto;
+            mensagem.className = `mensagem ${tipo}`;
+
+            // Esconde automaticamente após 5 segundos (exceto erro)
+            if (tipo !== 'erro') {
+                setTimeout(() => {
+                    mensagem.className = 'mensagem';
+                }, 5000);
+            }
+        }
+
+        // ========================================
+        // ENVIAR FORMULÁRIO (POST)
+        // ========================================
+        form.addEventListener('submit', async (evento) => {
+            evento.preventDefault(); // Não recarrega a página
+
+            // Desabilita o botão
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<span class="spinner"></span> Cadastrando...';
+
+            try {
+                // ========================================
+                // MONTA O OBJETO COM OS DADOS
+                // ========================================
+                const dados = {
+                    nomeC: document.getElementById('nomeC').value.trim(),
+                    telefone: document.getElementById('telefone').value.trim(),
+                    emailC: document.getElementById('emailC').value.trim()
+                };
+
+                // ========================================
+                // VALIDAÇÕES
+                // ========================================
+                if (!dados.nomeC) {
+                    throw new Error('O nome do cliente é obrigatório');
+                }
+
+                if (!dados.telefone) {
+                    throw new Error('O telefone é obragatório');
+                }
+
+                if (!dados.emailC) {
+                    throw new Error('O email é obrigatório');
+                }
+
+                if(!dados.emailC.includes("@gmail.com")){
+                  throw new Error('Complete com @gmail.com')
+                }
+
+                console.log('📤 Enviando dados:', dados);
+
+                // ========================================
+                // FAZ O POST PARA A API
+                // ========================================
+                const resposta = await fetch(`${API_URL}/produtos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                // ========================================
+                // TRATA A RESPOSTA
+                // ========================================
+                if (!resposta.ok) {
+                    // Tenta pegar a mensagem de erro do back-end
+                    let mensagemErro = `Erro HTTP ${resposta.status}`;
+                    
+                    try {
+                        const erroData = await resposta.json();
+                        if (erroData.message) {
+                            mensagemErro = erroData.message;
+                        } else if (erroData.errors) {
+                            mensagemErro = Object.values(erroData.errors).join(', ');
+                        }
+                    } catch (e) {
+                        // Ignora se não conseguir ler o JSON
+                    }
+                    
+                    throw new Error(mensagemErro);
+                }
+
+                const produtoCriado = await resposta.json();
+                console.log('✅ Cliente salvo:', produtoCriado);
+
+                // ========================================
+                // SUCESSO!
+                // ========================================
+                mostrarMensagem(
+                    `✅ Cliente "${produtoCriado.nomeC}" cadastrado com sucesso! (ID: ${produtoCriado.id})`,
+                    'sucesso'
+                );
+
+                // Limpa o formulário (mantém disponível marcado)
+                limparFormulario();
+
+            } catch (erro) {
+                console.error('❌ Erro:', erro);
+                mostrarMensagem(`❌ ${erro.message}`, 'erro');
+            } finally {
+                // Reabilita o botão
+                btnEnviar.disabled = false;
+                btnEnviar.innerHTML = '💾 Salvar Cliente';
+            }
+        });
+
+        // ========================================
+        // LIMPAR FORMULÁRIO
+        // ========================================
+        function limparFormulario() {
+            form.reset();
+
+            // Foca no primeiro campo
+            document.getElementById('nomeC').focus();
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Cadastro de Clientes iniciado');
+        });
+    </script>
+  
+
+
+  <!--
     <section id="NovoCliente" class="painel">
           <h3>Novo cliente</h3>
           <label>Nome<input type="text" /></label>
@@ -17,5 +233,6 @@
           <button type="button">Salvar</button>
         </section>
       </section>
+  -->
 </body>
 </html>
