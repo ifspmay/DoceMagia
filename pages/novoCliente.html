@@ -5,6 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovoCliente</title>
     <link rel="stylesheet" href="../styles/style.css" />
+    <style>
+        .subtitle{
+        text-align: center;
+        border:1px solid;
+        border-radius: 5px;
+        background-color: #ebe9e9;
+        padding: 5px;
+        width: fit-content;
+        margin: 0 auto;
+        margin-top: 15px;
+    }
+
+    #formCliente{
+        border: 2px solid #4e4e4e;
+        border-radius: 7px;
+        background-color: #f8b8e3;
+        display: flex;
+        flex-direction: column;
+        padding: 10px 15px 10px 15px;
+        gap: 5px;
+        width: 47%;
+        justify-content: center;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    label{
+        border:1px solid;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        padding: 3px;
+        width: fit-content;
+    }
+
+    input{
+        width: 40%;
+    }
+
+    .btn-group{
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    </style>
 </head>
 <body>
 
@@ -17,7 +62,7 @@
         <div id="mensagem" class="mensagem"></div>
 
         <!-- Formulário -->
-        <form id="formProduto">
+        <form id="formCliente">
             
             <!-- NOME -->
             <div class="form-group">
@@ -28,7 +73,7 @@
                     type="text" 
                     id="nomeC" 
                     name="nomeC"
-                    placeholder="Ex: Jonas2"
+                    placeholder="Ex: Paulão"
                     required
                     maxlength="200"
                 />
@@ -44,6 +89,7 @@
                     id="telefone" 
                     name="telefone"
                     placeholder="(DDD) 93288-2323"
+                    required
                     maxlength="12"
                 />
             </div>
@@ -55,13 +101,15 @@
                         Email <span class="required">*</span>
                     </label>
                     <input 
-                        type="text" 
+                        type="email" 
                         id="emailC" 
                         name="emailC"
-                        placeholder="Jonas2@gmail.com"
+                        placeholder="PaulãoDaRegulagem@gmail.com"
+                        required
                         maxlength="320"
                     />
                 </div>
+            </div>
 
             <!-- BOTÕES -->
             <div class="btn-group">
@@ -87,7 +135,7 @@
         // ========================================
         // ELEMENTOS DO DOM
         // ========================================
-        const form = document.getElementById('formProduto');
+        const form = document.getElementById('formCliente');
         const mensagem = document.getElementById('mensagem');
         const btnEnviar = document.getElementById('btnEnviar');
 
@@ -150,7 +198,7 @@
                 // ========================================
                 // FAZ O POST PARA A API
                 // ========================================
-                const resposta = await fetch(`${API_URL}/produtos`, {
+                const resposta = await fetch(`${API_URL}/clientes`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -179,14 +227,14 @@
                     throw new Error(mensagemErro);
                 }
 
-                const produtoCriado = await resposta.json();
-                console.log('✅ Cliente salvo:', produtoCriado);
+                const clienteCriado = await resposta.json();
+                console.log('✅ Cliente salvo:', clienteCriado);
 
                 // ========================================
                 // SUCESSO!
                 // ========================================
                 mostrarMensagem(
-                    `✅ Cliente "${produtoCriado.nomeC}" cadastrado com sucesso! (ID: ${produtoCriado.id})`,
+                    `✅ Cliente "${clienteCriado.nomeC || dados.nomeC}" cadastrado com sucesso! (ID: ${clienteCriado.id})`,
                     'sucesso'
                 );
 
@@ -199,7 +247,7 @@
             } finally {
                 // Reabilita o botão
                 btnEnviar.disabled = false;
-                btnEnviar.innerHTML = '💾 Salvar Cliente';
+                btnEnviar.innerHTML = '💾 Salvar';
             }
         });
 
@@ -220,19 +268,5 @@
             console.log('Cadastro de Clientes iniciado');
         });
     </script>
-  
-
-
-  <!--
-    <section id="NovoCliente" class="painel">
-          <h3>Novo cliente</h3>
-          <label>Nome<input type="text" /></label>
-          <label>Telefone<input type="text" /></label>
-          <label>E-mail<input type="email" /></label>
-          <button type="button" id="btnFecharNovoCliente"><a href="clientes.html">Voltar</a></button>
-          <button type="button">Salvar</button>
-        </section>
-      </section>
-  -->
 </body>
 </html>

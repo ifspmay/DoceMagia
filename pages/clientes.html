@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes</title>
     <link rel="stylesheet" href="../styles/style.css" />
+    <style>
+      #erroClientes{
+        border: 1px solid;
+        border-radius: 5px;
+        background-color: #ed7070;
+        width: fit-content;
+        margin: 10px;
+        padding: 5px 12px;
+        text-align: center;
+        white-space: nowrap;
+      }
+    </style>
 </head>
 <body>
     <section id="Clientes" class="tela">
@@ -12,26 +24,23 @@
 
         <div id="listaClientes" class="painel active">
           <div>
-            <input type="text" placeholder="Buscar cliente..." />
+            <input id="buscaCliente" type="text" placeholder="Buscar cliente..." />
             <button id="btnNovoCliente"><a href="novoCliente.html">+ Novo cliente</a></button>
           </div>
 
-          <table>
-            <tr>
-              <th>Cliente</th>
-              <th>Telefone</th>
-              <th>E-mail</th>
-            </tr>
-            <tr>
-              <td>Maria Souza</td>
-              <td>(11) 99999-0000</td>
-              <td>maria@email.com</td>
-            </tr>
-            <tr>
-              <td>João Pereira</td>
-              <td>(11) 98888-1111</td>
-              <td>joao@email.com</td>
-            </tr>
+          
+          <p id="loadingClientes">Carregando clientes...</p>
+          <p id="erroClientes" hidden></p>
+
+          <table id="tabelaClientes">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaClientes"></tbody>
           </table>
         </div>
 
@@ -44,5 +53,55 @@
       <button id="btnVendaBalcao"><a href="balcao.html">Venda Balcão</a></button>
       <button id="btnRelatorios"><a href="relatorios.html">Relatorios</a></button>
     </footer>
+    <script>
+      const API_URL = 'http://10.124.75.2:8080/api/v1';
+      const corpoTabelaClientes = document.getElementById('corpoTabelaClientes');
+      const loadingClientes = document.getElementById('loadingClientes');
+      const erroClientes = document.getElementById('erroClientes');
+      const buscaCliente = document.getElementById('buscaCliente');
+      let clientes = [];
+
+      function renderizarClientes() {
+        const termo = buscaCliente.value.trim().toLocaleLowerCase('pt-BR');
+        const filtrados = clientes.filter((cliente) => {
+          const dadosCliente = [cliente.nomeC || cliente.nome, cliente.telefone, cliente.emailC || cliente.email]
+            .filter(Boolean)
+            .join(' ')
+            .toLocaleLowerCase('pt-BR');
+          return dadosCliente.includes(termo);
+        });
+
+        corpoTabelaClientes.replaceChildren();
+        filtrados.forEach((cliente) => {
+          const linha = document.createElement('tr');
+          [cliente.nomeC || cliente.nome || '-', cliente.telefone || '-', cliente.emailC || cliente.email || '-']
+            .forEach((valor) => {
+              const celula = document.createElement('td');
+              celula.textContent = valor;
+              linha.appendChild(celula);
+            });
+          corpoTabelaClientes.appendChild(linha);
+        });
+      }
+
+      async function carregarClientes() {
+        loadingClientes.hidden = false;
+        erroClientes.hidden = true;
+        try {
+          const resposta = await fetch(`${API_URL}/clientes`);
+          if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+          clientes = await resposta.json();
+          renderizarClientes();
+        } catch (erro) {
+          erroClientes.textContent = `Erro ao carregar clientes: ${erro.message}`;
+          erroClientes.hidden = false;
+        } finally {
+          loadingClientes.hidden = true;
+        }
+      }
+
+      buscaCliente.addEventListener('input', renderizarClientes);
+      document.addEventListener('DOMContentLoaded', carregarClientes);
+    </script>
 </body>
 </html>

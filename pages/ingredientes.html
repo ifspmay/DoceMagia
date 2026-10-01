@@ -5,6 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ingredientes</title>
     <link rel="stylesheet" href="../styles/style.css" />
+    <style>
+      /*Reabastecer*/
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal.aberto {
+        display: flex;
+      }
+
+      .modal-conteudo {
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 30px;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-titulo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        color: #e428a5;
+        font-size: 1.5rem;
+      }
+
+      .btn-fechar {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: #999;
+        font-size: 1.8rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .btn-fechar:hover {
+        color: #dc3545;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .form-group input,
+      .form-group select {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font: inherit;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #e743b0;
+      }
+
+      .modal-botoes {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .modal-botoes button {
+        flex: 1;
+        padding: 12px;
+        border: 0;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .btn-salvar {
+        background: #e743b0;
+        color: white;
+      }
+
+      .btn-cancelar {
+        background: #e0e0e0;
+        color: #333;
+      }
+      /*mensagem erro*/
+      #erroIngredientes{
+        border: 1px solid;
+        border-radius: 5px;
+        background-color: #ed7070;
+        width: fit-content;
+        margin: 10px;
+        padding: 5px 12px;
+        text-align: center;
+      }
+
+    </style>
 </head>
 <body>
     <section id="Ingredientes" class="tela">
@@ -12,53 +128,54 @@
 
         <div id="listaIngredientes" class="painel active">
           <div>
-            <input type="text" placeholder="Buscar ingrediente..." />
+            <input id="buscaIngrediente" type="text" placeholder="Buscar ingrediente..." />
             <button id="btnNovoIngrediente"><a href="novoIngrediente.html">+ Novo ingrediente</a></button>
           </div>
 
-          <p>Em falta: açúcar e leite condensado</p>
+          <p id="avisoEstoque"></p>
+          <p id="loadingIngredientes">Carregando ingredientes...</p>
+          <p id="erroIngredientes" hidden></p>
 
-          <table>
-            <tr>
-              <th>Ingrediente</th>
-              <th>Unidade</th>
-              <th>Disponível</th>
-              <th>Ponto mínimo</th>
-              <th>Status</th>
-            </tr>
-            <tr>
-              <td>Açúcar</td>
-              <td>kg</td>
-              <td>1,5</td>
-              <td>3</td>
-              <td>Baixo</td>
-            </tr>
-            <tr>
-              <td>Farinha</td>
-              <td>kg</td>
-              <td>8</td>
-              <td>5</td>
-              <td>Ok</td>
-            </tr>
+          <table id="tabelaIngredientes">
+            <thead>
+              <tr>
+                <th>Ingrediente</th>
+                <th>Unidade</th>
+                <th>Disponível</th>
+                <th>Ponto mínimo</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaIngredientes"></tbody>
           </table>
 
-          <button id="btnReabastecer">Reabastecer</button>
+          <button id="btnReabastecer" type="button">Reabastecer</button>
         </div>
 
-        <section id="Reabastecer" class="painel">
-          <h3>Reabastecer</h3>
-          <label
-            >Ingrediente<select>
-              <option>Açúcar</option>
-              <option>Farinha</option>
-              <option>Leite condensado</option>
-            </select></label
-          >
-          <label>Quantidade a adicionar<input type="number" min="0" /></label>
-          <button type="button" id="btnFecharReabastecer">Voltar</button>
-          <button type="button">Salvar</button>
-        </section>
       </section>
+
+      <div id="modalReabastecer" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloReabastecer">
+        <div class="modal-conteudo">
+          <div class="modal-titulo">
+            <span id="tituloReabastecer">Reabastecer ingrediente</span>
+            <button class="btn-fechar" type="button" id="btnFecharReabastecer" aria-label="Fechar">&times;</button>
+          </div>
+          <form id="formReabastecer">
+            <div class="form-group">
+              <label for="ingredienteReabastecer">Ingrediente</label>
+              <select id="ingredienteReabastecer" required></select>
+            </div>
+            <div class="form-group">
+              <label for="quantidadeReabastecer">Quantidade a adicionar</label>
+              <input id="quantidadeReabastecer" type="number" min="0.01" step="any" required />
+            </div>
+            <div class="modal-botoes">
+              <button type="button" class="btn-cancelar" id="btnCancelarReabastecer">Cancelar</button>
+              <button type="button" class="btn-salvar">Salvar</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
     <footer>
       <button id="btnInicio"><a href="index.html">Inicio</a></button>
@@ -69,5 +186,95 @@
       <button id="btnVendaBalcao"><a href="balcao.html">Venda Balcão</a></button>
       <button id="btnRelatorios"><a href="relatorios.html">Relatorios</a></button>
     </footer>
+    <script>
+      const API_URL = 'http://10.124.75.2:8080/api/v1';
+      const corpoTabelaIngredientes = document.getElementById('corpoTabelaIngredientes');
+      const loadingIngredientes = document.getElementById('loadingIngredientes');
+      const erroIngredientes = document.getElementById('erroIngredientes');
+      const avisoEstoque = document.getElementById('avisoEstoque');
+      const buscaIngrediente = document.getElementById('buscaIngrediente');
+      const modalReabastecer = document.getElementById('modalReabastecer');
+      const ingredienteReabastecer = document.getElementById('ingredienteReabastecer');
+      let ingredientes = [];
+
+      function renderizarIngredientes() {
+        const termo = buscaIngrediente.value.trim().toLocaleLowerCase('pt-BR');
+        const filtrados = ingredientes.filter((ingrediente) =>
+          (ingrediente.nome || '').toLocaleLowerCase('pt-BR').includes(termo)
+        );
+
+        corpoTabelaIngredientes.replaceChildren();
+        filtrados.forEach((ingrediente) => {
+          const quantidade = Number(ingrediente.quantidade ?? ingrediente.quantidadeDisponivel ?? 0);
+          const pontoMinimo = Number(ingrediente.pontoMinimo ?? 0);
+          const linha = document.createElement('tr');
+          [
+            ingrediente.nome || '-',
+            ingrediente.unidade || '-',
+            quantidade,
+            pontoMinimo,
+            quantidade <= pontoMinimo ? 'Baixo' : 'Ok',
+          ].forEach((valor) => {
+            const celula = document.createElement('td');
+            celula.textContent = valor;
+            linha.appendChild(celula);
+          });
+          corpoTabelaIngredientes.appendChild(linha);
+        });
+
+        const abaixoDoMinimo = ingredientes.filter((ingrediente) =>
+          Number(ingrediente.quantidade ?? ingrediente.quantidadeDisponivel ?? 0) <= Number(ingrediente.pontoMinimo ?? 0)
+        );
+        avisoEstoque.textContent = abaixoDoMinimo.length
+          ? `Abaixo do ponto mínimo: ${abaixoDoMinimo.map((ingrediente) => ingrediente.nome).join(', ')}`
+          : 'Nenhum ingrediente abaixo do ponto mínimo.';
+      }
+
+      async function carregarIngredientes() {
+        loadingIngredientes.hidden = false;
+        erroIngredientes.hidden = true;
+        try {
+          const resposta = await fetch(`${API_URL}/ingredientes`);
+          if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+          ingredientes = await resposta.json();
+          renderizarIngredientes();
+        } catch (erro) {
+          erroIngredientes.textContent = `Erro ao carregar ingredientes: ${erro.message}`;
+          erroIngredientes.hidden = false;
+        } finally {
+          loadingIngredientes.hidden = true;
+        }
+      }
+
+      buscaIngrediente.addEventListener('input', renderizarIngredientes);
+      document.getElementById('btnReabastecer').addEventListener('click', () => {
+        ingredienteReabastecer.replaceChildren();
+        ingredientes.forEach((ingrediente) => {
+          const opcao = document.createElement('option');
+          opcao.value = ingrediente.id;
+          opcao.textContent = ingrediente.nome;
+          ingredienteReabastecer.appendChild(opcao);
+        });
+        modalReabastecer.classList.add('aberto');
+        ingredienteReabastecer.focus();
+      });
+
+      function fecharModalReabastecer() {
+        modalReabastecer.classList.remove('aberto');
+        document.getElementById('formReabastecer').reset();
+      }
+
+      document.getElementById('btnFecharReabastecer').addEventListener('click', fecharModalReabastecer);
+      document.getElementById('btnCancelarReabastecer').addEventListener('click', fecharModalReabastecer);
+      modalReabastecer.addEventListener('click', (evento) => {
+        if (evento.target === modalReabastecer) fecharModalReabastecer();
+      });
+      document.addEventListener('keydown', (evento) => {
+        if (evento.key === 'Escape' && modalReabastecer.classList.contains('aberto')) {
+          fecharModalReabastecer();
+        }
+      });
+      document.addEventListener('DOMContentLoaded', carregarIngredientes);
+    </script>
 </body>
 </html>

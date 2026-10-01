@@ -1,28 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovoIngrediente</title>
     <link rel="stylesheet" href="../styles/style.css" />
+    <style>
+      #formIngrediente{
+        border: 2px solid #4e4e4e;
+        border-radius: 7px;
+        background-color: #f8b8e3;
+        display: flex;
+        flex-direction: column;
+        padding: 7px 12px 7px 12px;
+        width: 57%;
+        justify-content: center;
+        margin: auto;
+        margin-top: 20px;
+      }
+
+      label{
+        border:1px solid;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        padding: 4px;
+        width: fit-content;
+      }
+
+      #ingrediente, #unidade, #quantidade, #pontoMinimo{
+        width:57%;
+        background-color: white;
+      }
+      #unidade{
+        padding: 2px;
+      }
+
+      button{
+        width:10%;
+      }
+      
+      .botoes{
+        display: flex;
+        flex-direction: row;
+        gap:5px;
+        justify-content:end;
+        margin-top: 5px;
+      }
+    </style>
 </head>
 <body>
     <section id="NovoIngrediente" class="painel">
-          <h3>Novo ingrediente</h3>
-          <label>Nome<input type="text" /></label>
-          <label
-            >Unidade
-            <select>
-              <option>Kg</option>
-              <option>g</option>
-              <option>mL</option>
-              <option>L</option>
+          <h1>Cadastrar ingrediente</h1>
+          <div id="mensagem" class="mensagem" role="status"></div>
+          <form id="formIngrediente">
+            <label for="ingrediente">Ingrediente</label>
+            <input 
+              id="ingrediente" 
+              name="ingrediente" 
+              type="text" 
+              placeholder="Ex: Farinha de trigo"
+              maxlength="200" 
+              required />
+
+            <label for="unidade">Unidade</label>
+            <select id="unidade" name="unidade" required>
+              <option value="">Selecione uma unidade</option>
+              <option value="Kg">Kg</option>
+              <option value="g">g</option>
+              <option value="mL">mL</option>
+              <option value="L">L</option>
             </select>
-          </label>
-          <label>Quantidade inicial<input type="number" min="0" /></label>
-          <label>Ponto mínimo<input type="number" min="0" /></label>
-          <button type="button" id="btnFecharNovoIngrediente"><a href="ingredientes.html">Voltar</a></button>
-          <button type="button">Salvar</button>
+
+            <label for="quantidade">Quantidade inicial</label>
+            <input 
+              id="quantidade" 
+              name="quantidade" 
+              type="number" 
+              placeholder="0"
+              min="0" 
+              step="any" 
+              required />
+
+            <label for="pontoMinimo">Ponto mínimo</label>
+            <input 
+              id="pontoMinimo" 
+              name="pontoMinimo" 
+              type="number" 
+              placeholder="0"
+              min="0" 
+              step="any" 
+              required />
+            <div class="botoes">
+              <button type="button" id="btnFecharNovoIngrediente"><a href="ingredientes.html">Voltar</a></button>
+              <button type="submit" id="btnSalvarIngrediente">Salvar</button>
+            </div>
+          </form>
         </section>
+    <script>
+      const API_URL = 'http://10.124.75.2:8080/api/v1';
+      const form = document.getElementById('formIngrediente');
+      const mensagem = document.getElementById('mensagem');
+      const btnSalvar = document.getElementById('btnSalvarIngrediente');
+
+      function mostrarMensagem(texto, tipo) {
+        mensagem.textContent = texto;
+        mensagem.className = `mensagem ${tipo}`;
+      }
+
+      form.addEventListener('submit', async (evento) => {
+        evento.preventDefault();
+        btnSalvar.disabled = true;
+        btnSalvar.textContent = 'Salvando...';
+
+        const dados = {
+          ingrediente: document.getElementById('ingrediente').value.trim(),
+          unidade: document.getElementById('unidade').value,
+          quantidade: Number(document.getElementById('quantidade').value),
+          pontoMinimo: Number(document.getElementById('pontoMinimo').value),
+        };
+
+        try {
+          const resposta = await fetch(`${API_URL}/ingredientes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados),
+          });
+
+          if (!resposta.ok) {
+            let mensagemErro = `Erro HTTP ${resposta.status}`;
+            try {
+              const erro = await resposta.json();
+              mensagemErro = erro.message || mensagemErro;
+            } catch (erroLeitura) {
+              // A resposta pode não conter JSON.
+            }
+            throw new Error(mensagemErro);
+          }
+
+          const criado = await resposta.json();
+          mostrarMensagem(`Ingrediente "${criado.ingrediente || dados.ingrediente}" cadastrado com sucesso!`, 'sucesso');
+          form.reset();
+          document.getElementById('ingrediente').focus();
+        } catch (erro) {
+          mostrarMensagem(`Erro ao cadastrar ingrediente: ${erro.message}`, 'erro');
+        } finally {
+          btnSalvar.disabled = false;
+          btnSalvar.textContent = 'Salvar';
+        }
+      });
+    </script>
 </body>
 </html>
