@@ -4,34 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovaEncomenda</title>
-    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/novaEncomenda.css" />
 </head>
 <body>
     <section id="NovaEncomenda" class="painel">
           <h3>Nova encomenda</h3>
-          <label
-            >Cliente<select>
-              <option>Maria Souza</option>
-              <option>João Pereira</option>
-            </select></label
-          >
-          <label>Data de entrega<input type="date" /></label>
-          <label
-            >Forma de pagamento<select>
+          <form id="Encomenda">
+          <label for="clientes"
+            >Cliente</label>
+              <input 
+              id="cliente" 
+              name="cliente" 
+              type="text" 
+              placeholder="Ex: Maria da Silva"
+              maxlength="50" 
+              required />
+          
+          <label for="entrega" >Data de entrega</label>
+          <input type="date" id="entrega" required/>
+          
+          <label>Forma de pagamento</label>
+            <select id="pagamento" required>
               <option>Pix</option>
               <option>Dinheiro</option>
               <option>Cartão</option>
-            </select></label
-          >
-          <label>Produto<select>
-              <option>Bolo de Chocolate</option>
-              <option>Torta de Morango</option>
-              <option>Brigadeiro</option>
-            </select></label
-          >
-          <label>Quantidade<input type="number" min="0" /></label>
-          <button type="button" id="btnFecharNovaEncomenda"><a href="encomendas.html">Voltar</a></button>
-          <button type="button">Salvar</button>
+            </select>
+
+          <label for="produto" >Produto</label>
+            <input 
+              id="produto" 
+              name="produto" 
+              type="text" 
+              placeholder="Ex: Bolo de Cenoura"
+              maxlength="200" 
+              required />
+            </textarea>
+
+            <label for="quantidade">Quantidade </label>
+            <input 
+              id="quantidade" 
+              name="quantidade" 
+              type="number" 
+              placeholder="0"
+              min="0" 
+              step="any" 
+              required />
+
+            <div class="botoes">
+              <button type="button" id="btnFecharNovoEncomenda"><a href="../pages/encomendas.html">Voltar</a></button>
+              <button type="submit" id="btnSalvarEncomenda">Salvar</button>
+            </div>
+        </form>
         </section>
+
+<script>
+      const API_URL = 'http://10.124.75.2:8080/api/v1';
+      const form = document.getElementById('formEncomenda');
+      const mensagem = document.getElementById('mensagem');
+      const btnSalvar = document.getElementById('btnSalvarEncomenda');
+
+      function mostrarMensagem(texto, tipo) {
+        mensagem.textContent = texto;
+        mensagem.className = `mensagem ${tipo}`;
+      }
+
+      form.addEventListener('submit', async (evento) => {
+        evento.preventDefault();
+        btnSalvar.disabled = true;
+        btnSalvar.textContent = 'Salvando...';
+
+        const dados = {
+          cliente: document.getElementById('cliente').value.trim(),
+          entrega: document.getElementById('entrega').value,
+          pagamento: document.getElementById('pagamento').value,
+          quantidade: Number(document.getElementById('quantidade').value),
+          produto: document.getElementById('produto').value.trim(),
+        };
+
+        try {
+          const resposta = await fetch(`${API_URL}/Encomenda`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados),
+          });
+
+          if (!resposta.ok) {
+            let mensagemErro = `Erro HTTP ${resposta.status}`;
+            try {
+              const erro = await resposta.json();
+              mensagemErro = erro.message || mensagemErro;
+            } catch (erroLeitura) {
+              // A resposta pode não conter JSON.
+            }
+            throw new Error(mensagemErro);
+          }
+
+          const criado = await resposta.json();
+          mostrarMensagem(`Encomenda "${criado.Encomenda || dados.Encomenda}" cadastrado com sucesso!`, 'sucesso');
+          form.reset();
+          document.getElementById('Encomenda').focus();
+        } catch (erro) {
+          mostrarMensagem(`Erro ao cadastrar Encomenda: ${erro.message}`, 'erro');
+        } finally {
+          btnSalvar.disabled = false;
+          btnSalvar.textContent = 'Salvar';
+        }
+      });
+    </script>
+
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Encomendas</title>
-    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/novaEncomenda.css" />
 </head>
 <body>
     <section id="Encomendas" class="tela">
@@ -16,7 +16,12 @@
             <button id="btnNovaEncomenda"><a href="novaEncomenda.html">+ Nova encomenda</a></button>
           </div>
 
-          <table>
+          <p id="avisoEstoque"></p>
+          <p id="loadingEncomendas">Carregando Encomendas...</p>
+          <p id="erroEncomenda" hidden></p>
+
+          <table id="tabelaEncomenda">
+          <thead>
             <tr>
               <th>Cliente</th>
               <th>Entrega</th>
@@ -24,21 +29,10 @@
               <th>Valor</th>
               <th>Status</th>
             </tr>
-            <tr>
-              <td>Maria</td>
-              <td>Hoje</td>
-              <td>Pix</td>
-              <td>R$ 120,00</td>
-              <td>Em produção</td>
-            </tr>
-            <tr>
-              <td>João</td>
-              <td>Amanhã</td>
-              <td>Dinheiro</td>
-              <td>R$ 80,00</td>
-              <td>Pendente</td>
-            </tr>
+          </thead>
+            <tbody id="corpoTabelaEncomenda"></tbody>
           </table>
+
         </div>
       </section>
 
@@ -51,5 +45,61 @@
       <button id="btnVendaBalcao"><a href="balcao.html">Venda Balcão</a></button>
       <button id="btnRelatorios"><a href="relatorios.html">Relatorios</a></button>
     </footer>
+
+
+    <script>
+      const API_URL = 'http://10.124.75.2:8080/api/v1';
+      const corpoTabelaEncomenda = document.getElementById('corpoTabelaEncomenda');
+      const loadingEncomenda = document.getElementById('loadingEncomenda');
+      const erroEncomenda = document.getElementById('erroEncomenda');
+      const avisoEncomenda = document.getElementById('avisoEncomenda');
+      const buscaEncomenda = document.getElementById('buscaEncomenda');
+      let Encomenda = [];
+
+      function renderizarEncomenda() {
+        const termo = buscaEncomenda.value.trim().toLocaleLowerCase('pt-BR');
+        const filtrados = Encomenda.filter((Encomenda) =>
+          (Encomenda.nome || '').toLocaleLowerCase('pt-BR').includes(termo)
+        );
+
+        corpoTabelaEncomenda.replaceChildren();
+        filtrados.forEach((Encomenda) => {
+          const quantidade = Number(Encomenda.quantidade ?? Encomenda.quantidadeDisponivel ?? 0);
+          const pontoMinimo = Number(Encomenda.pontoMinimo ?? 0);
+          const linha = document.createElement('tr');
+          [
+            Encomenda.nome || '-',
+            Encomenda.unidade || '-',
+            quantidade,
+            pontoMinimo,
+            quantidade <= pontoMinimo ? 'Baixo' : 'Ok',
+          ].forEach((valor) => {
+            const celula = document.createElement('td');
+            celula.textContent = valor;
+            linha.appendChild(celula);
+          });
+          corpoTabelaEncomenda.appendChild(linha);
+        });
+
+      async function carregarEncomenda() {
+        loadingEncomenda.hidden = false;
+        erroEncomenda.hidden = true;
+        try {
+          const resposta = await fetch(`${API_URL}/Encomenda`);
+          if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+          Encomenda = await resposta.json();
+          renderizarEncomenda();
+        } catch (erro) {
+          erroEncomenda.textContent = `Erro ao carregar Encomenda: ${erro.message}`;
+          erroEncomenda.hidden = false;
+        } finally {
+          loadingEncomenda.hidden = true;
+        }
+      }
+
+    </script>
 </body>
 </html>
+
+
+
