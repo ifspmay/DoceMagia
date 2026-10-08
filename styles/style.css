@@ -9,17 +9,9 @@ main {
   margin: 0 auto;
 }
 
-/*.tela {
-  display: none;
-}*/
-
 .tela.active {
   display: block;
 }
-
-/*.painel {
-  display: none;
-}*/
 
 .painel.active {
   display: block;
@@ -114,3 +106,4 @@ h2{
   justify-content: center;
   flex-direction: column;
 }
+

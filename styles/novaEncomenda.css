@@ -9,17 +9,9 @@ main {
   margin: 0 auto;
 }
 
-/*.tela {
-  display: none;
-}*/
-
 .tela.active {
   display: block;
 }
-
-/*.painel {
-  display: none;
-}*/
 
 .painel.active {
   display: block;
@@ -68,23 +60,6 @@ label {
   padding: 10px;
   min-width: 180px;
   flex: 1;
-}
-
-img{
-  max-width: 75px;
-  
-}
-
-td{
-  border: 1px solid #000;
-  border-radius:5px;
-  text-align: center;
-  padding: 10px;
-  background-color: #f8a1db;
-}
-
-th{
-  padding:5px 15px 2px 15px;
 }
 
 h1{

@@ -1,4 +1,4 @@
-        body {
+body {
   font-family: Arial, sans-serif;
   margin: 0%;
   background-color: #f5f5f5;
@@ -9,17 +9,9 @@ main {
   margin: 0 auto;
 }
 
-/*.tela {
-  display: none;
-}*/
-
 .tela.active {
   display: block;
 }
-
-/*.painel {
-  display: none;
-}*/
 
 .painel.active {
   display: block;
